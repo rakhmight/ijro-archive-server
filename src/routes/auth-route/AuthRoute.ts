@@ -14,11 +14,12 @@ const AuthRoute: FastifyPluginAsync = async (fastify: FastifyInstance, options: 
         try {
             const sessionData = await signin(req.body.data)
     
-            // if(sessionData) {
-
-            //     req.log.info({ actor: 'Route: auth' }, `New session opened`)
-            //     return rep.code(200).send({ statusCode: 200, data: sessionData })
-            // }
+            if(sessionData) {
+                req.log.info({ actor: 'Route: auth' }, `New session opened`)
+                rep.cookie('token', sessionData.token, { maxAge: 3*24*60*60*1000, httpOnly: true , path: '/'})
+                rep.cookie('id', ''+sessionData.id, { maxAge: 3*24*60*60*1000, httpOnly: true , path: '/'})
+                return rep.code(200).send({ statusCode: 200 })
+            }
         } catch (error) {
             return APIError(error as Error, rep, req)
         }
