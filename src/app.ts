@@ -5,6 +5,7 @@ import 'dotenv/config'
 //routes
 import AuthRoute from './routes/auth-route/AuthRoute'
 import FileRoute from './routes/file-route/FileRoute'
+import PingRoute from './routes/ping-route/PingRoute'
 
 //plugins
 import { corsParams } from './plugins/cors'
@@ -41,6 +42,7 @@ export const build = async () => {
 
     app.register(AuthRoute)
     app.register(FileRoute)
+    app.register(PingRoute)
 
     app.addHook('onRequest', authMiddleware)
 

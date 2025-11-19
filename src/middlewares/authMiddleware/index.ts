@@ -6,7 +6,7 @@ import { SessionModel } from "../../models/session/SessionModel"
 export default async function(req:FastifyRequest, rep:FastifyReply, done:HookHandlerDoneFunction){
     try {
 
-        if(req.url != '/api/v1/auth/signin'){
+        if(req.url != '/api/v1/auth/signin' && req.url != '/api/v1/ping'){
             const { token, id } = req.cookies
             if(!token || !id) throw Error('un-auth')
 
@@ -14,8 +14,7 @@ export default async function(req:FastifyRequest, rep:FastifyReply, done:HookHan
             if(!sessionTarget) throw Error('un-auth')
             if(sessionTarget.token != token) throw Error('un-auth')
 
-        }
-        
+        }        
 
     } catch (error) {
         return APIError(error as Error, rep, req)

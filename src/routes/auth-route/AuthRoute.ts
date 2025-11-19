@@ -18,7 +18,6 @@ const AuthRoute: FastifyPluginAsync = async (fastify: FastifyInstance, options: 
                 req.log.info({ actor: 'Route: auth' }, `New session opened`)
                 rep.cookie('token', sessionData.token, { maxAge: 3*24*60*60*1000, httpOnly: true , path: '/'})
                 rep.cookie('id', ''+sessionData.id, { maxAge: 3*24*60*60*1000, httpOnly: true , path: '/'})
-                rep.cookie('sessionActive', 'true', { maxAge: 3*24*60*60*1000, httpOnly: false , path: '/'})
                 return rep.code(200).send({ statusCode: 200 })
             }
         } catch (error) {
@@ -35,7 +34,6 @@ const AuthRoute: FastifyPluginAsync = async (fastify: FastifyInstance, options: 
                 req.log.info({ actor: 'Route: auth' }, `Session closed`)
                 rep.clearCookie('token', { path: '/' })
                 rep.clearCookie('id', { path: '/' })
-                rep.clearCookie('sessionActive', { path: '/' })
                 return rep.code(200).send({ statusCode: 200 })
             }
         } catch (error) {
