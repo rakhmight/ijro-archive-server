@@ -1,19 +1,24 @@
 import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify"
 import APIError from '../../exceptions/api-v1'
-import { SessionModel } from "../../models/session/SessionModel"
+import { app } from "../../server"
+import { FastifyRedis } from "@fastify/redis"
 
 
 export default async function(req:FastifyRequest, rep:FastifyReply, done:HookHandlerDoneFunction){
     try {
 
-        if(req.url != '/api/v1/auth/signin' && req.url != '/api/v1/ping'){
-            const { token, id } = req.cookies
+        if(req.url != '/api/v1/auth/signin' && req.url != '/api/v1/ping' && req.url != '/api/v1/check'){
+            
+            const redis:FastifyRedis = app.redis
+            const token = req.headers.token
+            const id = req.headers.id
+            
             if(!token || !id) throw Error('un-auth')
 
-            const sessionTarget = await SessionModel.findById(id)
-            if(!sessionTarget) throw Error('un-auth')
-            if(sessionTarget.token != token) throw Error('un-auth')
+            const checkedToken = await redis.get(id as string)
 
+            if(!checkedToken) throw Error('un-auth')
+            if(checkedToken != token) throw Error('un-auth')
         }        
 
     } catch (error) {

@@ -1,7 +1,6 @@
 import { FastifyPluginAsync, FastifyPluginOptions, FastifyInstance } from 'fastify';
 import fp from 'fastify-plugin';
 import mongoose from 'mongoose';
-import { SessionModel } from '../../models/session/SessionModel';
 import { FileModel } from '../../models/file/FileModel';
 
 const ConnectDB: FastifyPluginAsync<MyPluginOptions> = async (
@@ -19,7 +18,6 @@ const ConnectDB: FastifyPluginAsync<MyPluginOptions> = async (
             autoIndex: false
         });
         const models: Models = {
-            SessionModel,
             FileModel,
         };
         // fastify.decorate('db', { models });

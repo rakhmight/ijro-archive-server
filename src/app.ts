@@ -1,6 +1,7 @@
 // modules
 import fastify, { FastifyInstance } from 'fastify'
 import 'dotenv/config'
+import path from 'path'
 
 //routes
 import AuthRoute from './routes/auth-route/AuthRoute'
@@ -10,15 +11,13 @@ import PingRoute from './routes/ping-route/PingRoute'
 //plugins
 import { corsParams } from './plugins/cors'
 import { swaggerParams } from './plugins/swagger'
-import { cookieParams } from './plugins/cookie'
 import { swaggerUIParams } from './plugins/swagger/ui'
 import { loggerInstance } from './configs'
 import { dbPlugin, dbParams } from './plugins/db'
 
-//types
-import type { FastifyCookieOptions } from '@fastify/cookie'
-import path from 'path'
+//middlewares
 import authMiddleware from './middlewares/authMiddleware'
+import { redisParams } from './plugins/redis/redis'
 
 export const build = async () => {
     const app = fastify({ loggerInstance })
@@ -26,7 +25,7 @@ export const build = async () => {
 
     app.register(require('@fastify/cors'), corsParams)
     app.register(require('@fastify/swagger'), swaggerParams)
-    app.register(require('@fastify/cookie'), cookieParams as FastifyCookieOptions)
+    app.register(require('@fastify/redis'), redisParams)
     app.register(require('@fastify/swagger-ui'), swaggerUIParams)
     app.register(dbPlugin, dbParams)
     app.register(require('@fastify/multipart'), {
@@ -61,8 +60,8 @@ async function checkServerEnv(app: FastifyInstance){
         app.log.fatal('The environment variable responsible for connecting to the MongoDB database is not set')
         process.exit(1)
     }
-    if(!process.env.COOKIE_SECRETE){
-        app.log.fatal('The environment variable responsible for cookie encrypt is not set')
+    if(!process.env.REDIS_DB_HOST || !process.env.REDIS_DB_PORT  || !process.env.REDIS_DB_PASSWORD || !process.env.REDIS_DB_INDEX){
+        app.log.fatal('The environment variable responsible for connect to redis is not set')
         process.exit(1)
     }
     if(!process.env.ROOT_PASSWORD){

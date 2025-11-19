@@ -1,22 +1,22 @@
 import 'dotenv/config'
 import genToken from '../../utils/genToken'
-import { SessionModel } from '../../models/session/SessionModel'
-import SessionDTO from '../../dtos/session-dto/SessionDTO'
+import { FastifyRedis } from '@fastify/redis'
 
-export const signin = async (userData: AuthSignin) => {
+export const signin = async (userData: AuthSignin, redis:FastifyRedis) => {
 
     if(userData.password != process.env.ROOT_PASSWORD) throw new Error('not-found')
 
     const token = genToken(32)
-    const session = await SessionModel.create({
-        token
-    })
+    const id = `${Date.now()}-${genToken(8)}`
 
-    if(session) return SessionDTO(session)
+    const tokenData = await redis.set(id, token, 'EX', 1*24*60*60)
+
+    if(tokenData) return {
+        id, token
+    }
 }
 
-export const logout = async (id: string) => {
-    const session = await SessionModel.deleteOne({ _id: id })
-
-    return session
+export const logout = async (id: string, redis:FastifyRedis) => {
+    const tokenData = await redis.del(id)
+    if(tokenData) return tokenData
 }

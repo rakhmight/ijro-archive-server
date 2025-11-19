@@ -12,13 +12,12 @@ const AuthRoute: FastifyPluginAsync = async (fastify: FastifyInstance, options: 
 
    fastify.post<RouteWithData<ReqData<AuthSignin>>>('/api/v1/auth/signin', { schema: AuthSigninSchema }, async (req, rep) =>{
         try {
-            const sessionData = await signin(req.body.data)
+            const { redis } = fastify
+            const sessionData = await signin(req.body.data, redis)
     
             if(sessionData) {
                 req.log.info({ actor: 'Route: auth' }, `New session opened`)
-                rep.cookie('token', sessionData.token, { maxAge: 3*24*60*60*1000, httpOnly: true , path: '/'})
-                rep.cookie('id', ''+sessionData.id, { maxAge: 3*24*60*60*1000, httpOnly: true , path: '/'})
-                return rep.code(200).send({ statusCode: 200 })
+                return rep.code(200).send({ statusCode: 200, data: sessionData })
             }
         } catch (error) {
             return APIError(error as Error, rep, req)
@@ -27,13 +26,12 @@ const AuthRoute: FastifyPluginAsync = async (fastify: FastifyInstance, options: 
 
    fastify.post('/api/v1/auth/logout', { schema: AuthSigninSchema }, async (req, rep) =>{
         try {
-            const { id } = req.cookies
-            const sessionData = await logout(id!)
+            const { redis } = fastify
+            const id = req.headers.id
+            const sessionData = await logout(id as string, redis)
     
             if(sessionData) {
                 req.log.info({ actor: 'Route: auth' }, `Session closed`)
-                rep.clearCookie('token', { path: '/' })
-                rep.clearCookie('id', { path: '/' })
                 return rep.code(200).send({ statusCode: 200 })
             }
         } catch (error) {

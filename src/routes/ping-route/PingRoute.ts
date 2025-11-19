@@ -21,6 +21,13 @@ const PingRoute: FastifyPluginAsync = async (fastify: FastifyInstance, options: 
     })
 
     fastify.get('/api/v1/check', async (req, rep) => {
+        
+            const { token, id } = req.cookies
+            console.log(token, id);
+            console.log(token, id);
+            console.log(token, id);
+            console.log(token, id);
+            
         const data = {
             ok: true,
             time: rep.elapsedTime,

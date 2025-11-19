@@ -1,3 +1,7 @@
 export const corsParams = {
-    origin: '*'
+    origin: [
+        'http://localhost'
+    ],
+    credentials: true,
+    exposedHeaders: ["set-cookie"],
 }
