@@ -7,6 +7,9 @@ export default async function(req:FastifyRequest, rep:FastifyReply, done:HookHan
     try {
 
         if(req.url != '/api/v1/auth/signin' && req.url != '/api/v1/ping'){
+
+            console.log(req.url);
+            
             
             const redis:FastifyRedis = this.redis
             const token = req.headers.token
