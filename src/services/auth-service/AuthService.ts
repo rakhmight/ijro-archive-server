@@ -4,13 +4,19 @@ import { SessionModel } from '../../models/session/SessionModel'
 import SessionDTO from '../../dtos/session-dto/SessionDTO'
 
 export const signin = async (userData: AuthSignin) => {
+
     if(userData.password != process.env.ROOT_PASSWORD) throw new Error('not-found')
 
-        const token = genToken(32)
+    const token = genToken(32)
+    const session = await SessionModel.create({
+        token
+    })
 
-        const session = await SessionModel.create({
-            token
-        })
+    if(session) return SessionDTO(session)
+}
 
-        if(session) return SessionDTO(session)
+export const logout = async (id: string) => {
+    const session = await SessionModel.deleteOne({ _id: id })
+
+    return session
 }
