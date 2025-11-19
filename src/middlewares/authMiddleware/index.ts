@@ -6,7 +6,7 @@ import { FastifyRedis } from "@fastify/redis"
 export default async function(req:FastifyRequest, rep:FastifyReply, done:HookHandlerDoneFunction){
     try {
 
-        if(req.url != '/api/v1/auth/signin' || req.url != '/api/v1/ping'){
+        if(req.url != '/api/v1/auth/signin' && req.url != '/api/v1/ping'){
             
             const redis:FastifyRedis = this.redis
             const token = req.headers.token
