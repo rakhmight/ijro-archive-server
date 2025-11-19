@@ -27,6 +27,17 @@ export const AuthSigninSchema = {
           type: 'object',
           properties: {
             statusCode: { type: 'integer', default: 200 },
+            data: {
+                type: 'object',
+                properties: {
+                    token: {
+                        type: 'string'
+                    },
+                    id: {
+                        type: 'string'
+                    }
+                }
+            }
           }
         },
         400: BadRequestError,
