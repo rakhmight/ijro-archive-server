@@ -28,6 +28,7 @@ export const build = async () => {
     app.register(require('@fastify/redis'), redisParams)
     app.register(require('@fastify/swagger-ui'), swaggerUIParams)
     app.register(dbPlugin, dbParams)
+    app.register(require('fastify-disablecache'));
     app.register(require('@fastify/multipart'), {
         limits: {
             files: 1
