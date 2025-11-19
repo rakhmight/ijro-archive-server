@@ -1,3 +1,4 @@
 export const corsParams = {
-    origin: "*"
+    origin: true,
+    credentials: true,
 }
