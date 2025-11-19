@@ -31,7 +31,8 @@ export const build = async () => {
     app.register(require('fastify-disablecache'));
     app.register(require('@fastify/multipart'), {
         limits: {
-            files: 1
+            files: 1,
+            fileSize: 5000 * 1024 * 1024
         }
     })
     app.register(require('@fastify/static'), {
