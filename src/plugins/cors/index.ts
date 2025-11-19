@@ -1,4 +1,5 @@
 export const corsParams = {
-    origin: true,
+    origin: "*",
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
 }
