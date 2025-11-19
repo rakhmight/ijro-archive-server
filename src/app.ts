@@ -12,7 +12,7 @@ import PingRoute from './routes/ping-route/PingRoute'
 import { corsParams } from './plugins/cors'
 import { swaggerParams } from './plugins/swagger'
 import { swaggerUIParams } from './plugins/swagger/ui'
-import { loggerInstance } from './configs'
+import { fastifyConfig } from './configs'
 import { dbPlugin, dbParams } from './plugins/db'
 
 //middlewares
@@ -20,7 +20,7 @@ import authMiddleware from './middlewares/authMiddleware'
 import { redisParams } from './plugins/redis/redis'
 
 export const build = async () => {
-    const app = fastify({ loggerInstance })
+    const app = fastify(fastifyConfig)
     await checkServerEnv(app as any)
 
     app.register(require('@fastify/cors'), corsParams)

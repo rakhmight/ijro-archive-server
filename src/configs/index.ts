@@ -26,10 +26,9 @@ const transport = pino.transport({
   ]
 })
 
-export const loggerInstance = pino(
-  transport
-)
-
 export const fastifyConfig = {
-    bodyLimit: 100 * 1024 * 1024
+    logger: pino(
+      transport
+    ),
+    bodyLimit: 5000 * 1024 * 1024 // Default Limit set to 5000MB
 }

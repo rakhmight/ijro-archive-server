@@ -23,9 +23,7 @@ const FileRoute: FastifyPluginAsync = async (fastify: FastifyInstance, options: 
 
     fastify.get('/api/v1/files', async (req, rep) =>{
         try {
-            const filesData = await getFiles()
-            console.log(filesData);
-            
+            const filesData = await getFiles()            
 
             if(filesData){
                 return rep.code(200).send({ statusCode: 200, data: filesData })
