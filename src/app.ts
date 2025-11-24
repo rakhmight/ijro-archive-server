@@ -30,7 +30,7 @@ export const build = async () => {
     app.register(require('@fastify/cors'), corsParams)
     app.register(require('@fastify/swagger'), swaggerParams)
     app.register(require('@fastify/cookie'), cookieParams as FastifyCookieOptions)
-    // app.register(require('@fastify/redis'), redisParams)
+    app.register(require('@fastify/redis'), redisParams)
     app.register(require('@fastify/swagger-ui'), swaggerUIParams)
     app.register(dbPlugin, dbParams)
     app.register(require('fastify-disablecache'));
@@ -73,6 +73,10 @@ async function checkServerEnv(app: FastifyInstance){
     }
     if(!process.env.ROOT_PASSWORD){
         app.log.fatal('The environment variable responsible for root password is not set')
+        process.exit(1)
+    }
+    if(!process.env.COOKIE_SECRET){
+        app.log.fatal('The environment variable responsible for cookie secret is not set')
         process.exit(1)
     }
 }
