@@ -9,14 +9,16 @@ export const signin = async (userData: AuthSignin, redis:FastifyRedis) => {
     const token = genToken(32)
     const id = `${Date.now()}-${genToken(8)}`
 
-    const tokenData = await redis.set(id, token, 'EX', 1*24*60*60)
+    // const tokenData = await redis.set(id, token, 'EX', 1*24*60*60)
 
-    if(tokenData) return {
+    // if(tokenData)
+    return {
         id, token
     }
 }
 
 export const logout = async (id: string, redis:FastifyRedis) => {
-    const tokenData = await redis.del(id)
-    if(tokenData) return tokenData
+    // const tokenData = await redis.del(id)
+    // if(tokenData) return tokenData
+    return true
 }

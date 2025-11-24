@@ -14,10 +14,14 @@ import { swaggerParams } from './plugins/swagger'
 import { swaggerUIParams } from './plugins/swagger/ui'
 import { fastifyConfig } from './configs'
 import { dbPlugin, dbParams } from './plugins/db'
+import { cookieParams } from './plugins/cookie'
 
 //middlewares
 import authMiddleware from './middlewares/authMiddleware'
 import { redisParams } from './plugins/redis/redis'
+
+// types
+import { FastifyCookieOptions } from '@fastify/cookie'
 
 export const build = async () => {
     const app = fastify(fastifyConfig)
@@ -25,7 +29,8 @@ export const build = async () => {
 
     app.register(require('@fastify/cors'), corsParams)
     app.register(require('@fastify/swagger'), swaggerParams)
-    app.register(require('@fastify/redis'), redisParams)
+    app.register(require('@fastify/cookie'), cookieParams as FastifyCookieOptions)
+    // app.register(require('@fastify/redis'), redisParams)
     app.register(require('@fastify/swagger-ui'), swaggerUIParams)
     app.register(dbPlugin, dbParams)
     app.register(require('fastify-disablecache'));

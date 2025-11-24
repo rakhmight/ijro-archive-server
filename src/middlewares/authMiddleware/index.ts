@@ -9,18 +9,23 @@ export default async function(req:FastifyRequest, rep:FastifyReply, done:HookHan
         if(req.url != '/api/v1/auth/signin' && req.url != '/api/v1/ping'){
 
             console.log(req.url);
-            
-            
-            const redis:FastifyRedis = this.redis
-            const token = req.headers.token
-            const id = req.headers.id
-            
-            if(!token || !id) throw Error('un-auth')
+            const { token, id } = req.cookies
 
-            const checkedToken = await redis.get(id as string)
+            console.log(token, id);
+            
 
-            if(!checkedToken) throw Error('un-auth')
-            if(checkedToken != token) throw Error('un-auth')
+            
+            
+            // const redis:FastifyRedis = this.redis
+            // const token = req.headers.token
+            // const id = req.headers.id
+            
+            // if(!token || !id) throw Error('un-auth')
+
+            // const checkedToken = await redis.get(id as string)
+
+            // if(!checkedToken) throw Error('un-auth')
+            // if(checkedToken != token) throw Error('un-auth')
         }        
 
     } catch (error) {
