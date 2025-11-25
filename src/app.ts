@@ -37,7 +37,7 @@ export const build = async () => {
     app.register(require('@fastify/multipart'), {
         limits: {
             files: 1,
-            fileSize: 5000 * 1024 * 1024
+            fileSize: 500 * 1024 * 1024
         }
     })
     app.register(require('@fastify/static'), {
@@ -50,7 +50,7 @@ export const build = async () => {
     app.register(FileRoute)
     app.register(PingRoute)
 
-    // app.addHook('onRequest', authMiddleware)
+    app.addHook('onRequest', authMiddleware)
 
     app.after()
     return app
