@@ -23,6 +23,22 @@ export const saveFile = async (data:any) => {
     return FileDTO(fileData)
 }
 
+export const deleteFile = async (fileID: import('mongoose').Schema.Types.ObjectId) => {
+
+    const file = await FileModel.findById(fileID)
+    if(!file) throw new Error('not-found')
+
+    try {
+        const deleteThemeFile = await fs.rm(path.join(__dirname, '..', '..', 'store', file.name))
+    } catch (error) {
+        console.error(error)
+        throw error
+    }
+
+    const fileData = await FileModel.deleteOne({ _id: fileID })
+    return fileData
+}
+
 export const getFiles = async () => {
     const files = await FileModel.find()
     const filesData = files.map(f => FileDTO(f))

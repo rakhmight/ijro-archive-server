@@ -5,7 +5,7 @@ import {
 } from 'fastify';
 import fp from 'fastify-plugin';
 import APIError from '../../exceptions/api-v1'
-import { getFiles, saveFile } from '../../services/file-service/FileService';
+import { deleteFile, getFiles, saveFile } from '../../services/file-service/FileService';
 
 const FileRoute: FastifyPluginAsync = async (fastify: FastifyInstance, options: FastifyPluginOptions) => {
 
@@ -13,6 +13,18 @@ const FileRoute: FastifyPluginAsync = async (fastify: FastifyInstance, options: 
         try{
             const data = await req.file()
             const fileData = await saveFile(data)
+
+            return rep.code(200).send({ statusCode: 200, data: fileData })
+        } catch (error) {
+            return APIError(error as Error, rep, req)
+        }
+    
+    })
+
+    fastify.delete<RouteWithParams<FileID>>('/api/v1/files/:id', async (req, rep) =>{
+        try{
+            const fileID = await req.params.id
+            const fileData = await deleteFile(fileID)
 
             return rep.code(200).send({ statusCode: 200, data: fileData })
         } catch (error) {
