@@ -50,7 +50,7 @@ export const build = async () => {
     app.register(FileRoute)
     app.register(PingRoute)
 
-    // app.addHook('onRequest', authMiddleware)
+    app.addHook('onRequest', authMiddleware)
 
     app.after()
     return app
