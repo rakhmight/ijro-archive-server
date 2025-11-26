@@ -18,5 +18,5 @@ export const signin = async (userData: AuthSignin, redis:FastifyRedis) => {
 
 export const logout = async (id: string, redis:FastifyRedis) => {
     const tokenData = await redis.del(id)
-    if(tokenData) return tokenData
+    return true
 }
