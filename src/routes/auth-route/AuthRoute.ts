@@ -29,7 +29,7 @@ const AuthRoute: FastifyPluginAsync = async (fastify: FastifyInstance, options: 
    fastify.post('/api/v1/auth/logout', { schema: AuthSigninSchema }, async (req, rep) =>{
         try {
             const { redis } = fastify
-            const id = req.headers.id
+            const { id } = req.cookies
             const sessionData = await logout(id as string, redis)
     
             if(sessionData) {
